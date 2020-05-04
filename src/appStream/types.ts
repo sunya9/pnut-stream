@@ -5,7 +5,7 @@ export interface CreateAppStreamBody {
   object_types: ObjectTypes[]
 }
 
-type ObjectTypes =
+export type ObjectTypes =
   | 'post'
   | 'bookmark'
   | 'follow'
