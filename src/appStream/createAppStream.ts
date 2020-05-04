@@ -21,15 +21,7 @@ export function createAppStream(context: Context) {
 function getBodyString() {
   const body: CreateAppStreamBody = {
     type: 'long_poll',
-    object_types: [
-      'post',
-      'bookmark',
-      'follow',
-      'message',
-      'channel',
-      'channel_subscription',
-      'poll',
-    ],
+    object_types: ['post', 'bookmark', 'follow', 'message', 'poll'],
   }
   return JSON.stringify(body)
 }
