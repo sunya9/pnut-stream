@@ -1,6 +1,9 @@
 import { appErrors } from 'errors/appErrors'
+import { getFetch } from 'context/fetch'
+import { RequestInfo, RequestInit } from 'node-fetch'
 
-interface Context {
+export interface Context {
+  fetch: <T = any>(input: RequestInfo, init?: RequestInit) => Promise<T>
   env: {
     appAccessToken: string
   }
@@ -9,6 +12,7 @@ interface Context {
 export function createContext(): Context {
   const appAccessToken = getAppAccessToken()
   return {
+    fetch: getFetch(appAccessToken),
     env: {
       appAccessToken,
     },
