@@ -28,18 +28,17 @@ function setEventHandler(ws: WebSocket): Promise<never> {
     logger(data)
   })
 
-  const connection = new Promise<never>((resolve, reject) => {
+  ws.on('error', (err) => {
+    logger(err)
+  })
+  ws.on('unexpected-response', () => {
+    logger('unexpected-response')
+  })
+
+  const connection = new Promise<never>((resolve) => {
     ws.on('close', (code, reason) => {
       logger(`connection closed. code: ${code}, reason: ${reason}`)
       resolve()
-    })
-    ws.on('error', (err) => {
-      logger(err)
-      reject(err)
-    })
-    ws.on('unexpected-response', () => {
-      logger('unexpected-response')
-      reject()
     })
   })
   return connection
