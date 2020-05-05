@@ -5,7 +5,6 @@ class AppError extends Error {
 }
 
 export const appErrors = {
-  cannotLoadAppAccessToken: new AppError(
-    'You have to set app_access_token via environment variable'
-  ),
+  cannotLoadEnv: (key: string) =>
+    new AppError(`You have to set ${key} via environment variable`),
 } as const

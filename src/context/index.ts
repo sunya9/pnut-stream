@@ -6,21 +6,24 @@ export interface Context {
   fetch: <T = any>(input: RequestInfo, init?: RequestInit) => Promise<T>
   env: {
     appAccessToken: string
+    registrationToken: string
   }
 }
 
 export function createContext(): Context {
-  const appAccessToken = getAppAccessToken()
+  const appAccessToken = getEnv('app_access_token')
+  const registrationToken = getEnv('registration_token')
   return {
     fetch: getFetch(appAccessToken),
     env: {
       appAccessToken,
+      registrationToken,
     },
   }
 }
 
-function getAppAccessToken(): string {
-  const appAccesToken = process.env.app_access_token
-  if (!appAccesToken) throw appErrors.cannotLoadAppAccessToken
-  return appAccesToken
+function getEnv(key: string): string {
+  const value = process.env[key]
+  if (!value) throw appErrors.cannotLoadEnv(key)
+  return value
 }
