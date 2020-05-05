@@ -1,4 +1,4 @@
-import { Context } from 'context'
+import { Context } from 'src/context'
 
 export function deleteStreams(context: Context) {
   return async () => {

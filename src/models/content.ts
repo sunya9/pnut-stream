@@ -1,4 +1,4 @@
-import { Entities } from 'models/entity'
+import { Entities } from 'src/models/entity'
 
 export interface Content {
   text: string

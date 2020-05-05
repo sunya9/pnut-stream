@@ -1,8 +1,8 @@
-import { init } from 'core/init'
-import { createClientInstance } from 'client'
+import { init } from 'src/core/init'
+import { createClientInstance } from 'src/client'
 import debug from 'debug'
-import { tearDown } from 'core/tearDown'
-import { Context } from 'context'
+import { tearDown } from 'src/core/tearDown'
+import { Context } from 'src/context'
 import WebSocket from 'ws'
 const logger = debug('pnut-stream:core:main')
 

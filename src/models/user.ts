@@ -1,5 +1,5 @@
-import { Entities } from 'models/entity'
-import { Content, HasContent } from 'models/content'
+import { Entities } from 'src/models/entity'
+import { Content, HasContent } from 'src/models/content'
 
 export interface User extends HasContent {
   badge: {

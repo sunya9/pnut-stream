@@ -1,7 +1,7 @@
-import { ObjectTypes } from 'appStream/types'
-import { User } from 'models/user'
-import { Post } from 'models/post'
-import { Message } from 'models/message'
+import { ObjectTypes } from 'src/appStream/types'
+import { User } from 'src/models/user'
+import { Post } from 'src/models/post'
+import { Message } from 'src/models/message'
 
 interface BaseMeta {
   timestamp: number

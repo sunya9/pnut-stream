@@ -1,5 +1,5 @@
 import debug from 'debug'
-import { main } from 'core/main'
+import { main } from 'src/core/main'
 const logger = debug('pnut-stream:main')
 
 try {

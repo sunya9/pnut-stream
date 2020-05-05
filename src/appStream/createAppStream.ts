@@ -1,6 +1,6 @@
 import { CreateAppStreamBody, CreateAppStreamResponse } from './types'
-import { Context } from 'context'
-import { deleteStreams } from 'appStream/deleteSterams'
+import { Context } from 'src/context'
+import { deleteStreams } from 'src/appStream/deleteSterams'
 import debug from 'debug'
 const logger = debug('pnut-stream:client:createAppStream')
 const createStreamUrl = 'https://api.pnut.io/v0/streams'

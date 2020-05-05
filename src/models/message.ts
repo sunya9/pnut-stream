@@ -1,6 +1,6 @@
-import { Source } from 'models/source'
-import { HasContent } from 'models/content'
-import { HasUser } from 'models/hasUser'
+import { Source } from 'src/models/source'
+import { HasContent } from 'src/models/content'
+import { HasUser } from 'src/models/hasUser'
 
 export interface Message extends HasUser, HasContent {
   created_at: Date
