@@ -10,33 +10,46 @@ function createRedisClient(): redis.RedisClient {
 
 // singleton
 function createRedisWrapper(client: RedisClient) {
-  return () => ({
+  return {
     add: registerUserToken(client),
     get: getUserTokens(client),
     remove: removeUserToken(client),
-  })
+  }
 }
 
 export const redisClient = createRedisWrapper(createRedisClient())
 
 function registerUserToken(client: redis.RedisClient) {
-  return (id: string, token: string) => {
-    client.rpush(id, token, callback)
-  }
+  return (id: string, token: string) =>
+    new Promise((resolve, reject) =>
+      client.rpush(id, token, wrapPromiseWithLogger(resolve, reject))
+    )
 }
 
 function removeUserToken(client: redis.RedisClient) {
-  return (id: string, token: string) => {
-    client.lrem(id, 0, token, callback)
-  }
+  return (id: string, token: string) =>
+    new Promise((resolve, reject) =>
+      client.lrem(id, 0, token, wrapPromiseWithLogger(resolve, reject))
+    )
 }
 
 function getUserTokens(client: redis.RedisClient) {
-  return (id: string) => {
-    client.lrange(id, 0, -1, callback)
-  }
+  return (id: string) =>
+    new Promise((resolve, reject) =>
+      client.lrange(id, 0, -1, wrapPromiseWithLogger(resolve, reject))
+    )
 }
 
-function callback(err: Error | null) {
-  if (err) return logger(err)
+function wrapPromiseWithLogger(
+  resolve: (value?: unknown) => void,
+  reject: (err: Error) => void
+) {
+  return (err: Error | null) => {
+    if (err) {
+      logger(err)
+      reject(err)
+      return
+    }
+    resolve()
+  }
 }
