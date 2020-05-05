@@ -23,6 +23,7 @@
     "dev": "ts-node -r tsconfig-paths/register ./src/index.ts"
   },
   "dependencies": {
+    "firebase-admin": "^8.11.0",
     "node-fetch": "^2.6.0",
     "ws": "^7.2.5"
   }
