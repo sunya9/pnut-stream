@@ -22,34 +22,34 @@ export const redisClient = createRedisWrapper(createRedisClient())
 function registerUserToken(client: redis.RedisClient) {
   return (id: string, token: string) =>
     new Promise((resolve, reject) =>
-      client.rpush(id, token, wrapPromiseWithLogger(resolve, reject))
+      client.sadd(id, token, wrapPromiseWithLogger(resolve, reject))
     )
 }
 
 function removeUserToken(client: redis.RedisClient) {
   return (id: string, token: string) =>
     new Promise((resolve, reject) =>
-      client.lrem(id, 0, token, wrapPromiseWithLogger(resolve, reject))
+      client.srem(id, token, wrapPromiseWithLogger(resolve, reject))
     )
 }
 
 function getUserTokens(client: redis.RedisClient) {
   return (id: string) =>
-    new Promise((resolve, reject) =>
-      client.lrange(id, 0, -1, wrapPromiseWithLogger(resolve, reject))
-    )
+    new Promise<string[]>((resolve, reject) => {
+      return client.smembers(id, wrapPromiseWithLogger(resolve, reject))
+    })
 }
 
-function wrapPromiseWithLogger(
-  resolve: (value?: unknown) => void,
+function wrapPromiseWithLogger<T = any>(
+  resolve: (value?: T) => void,
   reject: (err: Error) => void
 ) {
-  return (err: Error | null) => {
+  return (err: Error | null, data: T) => {
     if (err) {
       logger(err)
       reject(err)
       return
     }
-    resolve()
+    resolve(data)
   }
 }
