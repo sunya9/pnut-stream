@@ -6,4 +6,6 @@ services:
     restart: always
     volumes:
       - ./redis:/data
-    command: redis-server --appendonly yes
+    command: redis-server
+    ports:
+      - "6379:6379"
