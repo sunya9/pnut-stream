@@ -14,34 +14,35 @@ export interface BroadcastMessage {
   message?: {
     meta: {
       type: 'post' | 'message' | 'bookmark' | 'follow'
+      is_deleted?: boolean
     }
   }
 }
 
 interface BroadcastPostMessage extends BroadcastMessage {
   message: {
-    meta: Pick<StreamMessage.PostMessage['meta'], 'type'>
+    meta: Pick<StreamMessage.PostMessage['meta'], 'type' | 'is_deleted'>
     data: StreamMessage.PostMessage['data']
   }
 }
 
 interface BroadcastMessageMessage extends BroadcastMessage {
   message: {
-    meta: Pick<StreamMessage.MessageMessage['meta'], 'type'>
+    meta: Pick<StreamMessage.MessageMessage['meta'], 'type' | 'is_deleted'>
     data: StreamMessage.MessageMessage['data']
   }
 }
 
 interface BroadcastBookmarkMessage extends BroadcastMessage {
   message: {
-    meta: Pick<StreamMessage.BookmarkMessage['meta'], 'type'>
+    meta: Pick<StreamMessage.BookmarkMessage['meta'], 'type' | 'is_deleted'>
     data: StreamMessage.BookmarkMessage['data']
   }
 }
 
 interface BroadcastFollowMessage extends BroadcastMessage {
   message: {
-    meta: Pick<StreamMessage.FollowMessage['meta'], 'type'>
+    meta: Pick<StreamMessage.FollowMessage['meta'], 'type' | 'is_deleted'>
     data: StreamMessage.FollowMessage['data']
   }
 }
@@ -51,7 +52,7 @@ export function toBroadcastMessage(
 ): BroadcastMessage | undefined {
   const abstractMessage = JSON.parse(data.toString())
   if (messageIsPost(abstractMessage)) {
-    if (abstractMessage.data.is_deleted) return
+    if (abstractMessage.meta.is_deleted) return // ignore delete
     const res =
       abstractMessage.data.content?.entities.mentions.map(
         (mention) => mention.id
@@ -64,6 +65,7 @@ export function toBroadcastMessage(
     return broadcastMessage
   }
   if (messageIsMessage(abstractMessage)) {
+    if (abstractMessage.meta.is_deleted) return // ignore delete
     const broadcastMessage: BroadcastMessageMessage = {
       targetIds: abstractMessage.meta.subscribed_user_ids.filter(
         excludeContributor(abstractMessage.data)
@@ -73,15 +75,17 @@ export function toBroadcastMessage(
     return broadcastMessage
   }
   if (messageIsBookmark(abstractMessage)) {
+    if (abstractMessage.meta.is_deleted) return // ignore delete
     const broadcastMessage: BroadcastBookmarkMessage = {
       targetIds: [abstractMessage.data.user.id].filter(
-        excludeContributor(abstractMessage.data)
+        excludeContributor(abstractMessage.data.post)
       ),
       message: abstractMessage,
     }
     return broadcastMessage
   }
   if (messageIsFollow(abstractMessage)) {
+    if (abstractMessage.meta.is_deleted) return // ignore delete
     const broadcastMessage: BroadcastFollowMessage = {
       targetIds: [abstractMessage.data.followed_user.id],
       message: abstractMessage,

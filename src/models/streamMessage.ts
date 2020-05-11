@@ -8,6 +8,7 @@ interface BaseMeta {
   id: string
   type: ObjectTypes
   suppress_notifications: string[]
+  is_deleted?: boolean
 }
 export interface BaseStreamMessage {
   meta: BaseMeta
@@ -17,7 +18,6 @@ export namespace StreamMessage {
   export interface PostMessage extends BaseStreamMessage {
     meta: BaseMeta & {
       revision?: boolean
-      is_deleted?: boolean
       type: 'post'
     }
     data: Post
