@@ -40,6 +40,5 @@ async function verifyPnutToken(pnutAccessToken: string): Promise<string> {
 
 export async function listenServer() {
   const app = createApp()
-  const address = await app.listen(+(process.env.PORT || '') || 3001)
-  app.log.info(`server listening on ${address}`)
+  await app.listen(+(process.env.PORT || '') || 3001)
 }
