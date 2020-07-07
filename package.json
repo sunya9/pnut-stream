@@ -24,7 +24,7 @@
     "dev": "ts-node -r tsconfig-paths/register ./src/index.ts"
   },
   "dependencies": {
-    "fastify": "^2.14.0",
+    "fastify": "^3.0.0",
     "firebase-admin": "^8.11.0",
     "node-fetch": "^2.6.0",
     "redis": "^3.0.2",
